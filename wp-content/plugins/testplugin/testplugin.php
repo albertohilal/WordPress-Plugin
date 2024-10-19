@@ -12,32 +12,32 @@ Author URI: http://tu-sitio-web.com
 
 // Activation and deactivation hooks
 function Activar(){
-    global $wpdb;
+        global $wpdb;
 
-    $sql ="CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuestas(
-    `EncuestaId` INT NOT NULL AUTO_INCREMENT,
-        `Nombre` VARCHAR(45) NULL,
-        `ShortCode` VARCHAR(45) NULL,
-        PRIMARY KEY (`EncuestaId`));";
+        $sql ="CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuestas(
+        `EncuestaId` INT NOT NULL AUTO_INCREMENT,
+            `Nombre` VARCHAR(45) NULL,
+            `ShortCode` VARCHAR(45) NULL,
+            PRIMARY KEY (`EncuestaId`));";
 
-     $wpdb->query($sql);   
+         $wpdb->query($sql);   
 
-     $sql2 = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuenstas_detalle(
-        `DetalleId` INT NOT NULL AUTO_INCREMENT,
-        `EncuestaId` INT NULL,
-        `Pregunta` VARCHAR(150) NULL,
-        `Tipo` VARCHAR(45) NULL,
-        PRIMARY KEY (`DetalleId`));";
-    $wpdb->query($sql2);   
+         $sql2 = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuenstas_detalle(
+            `DetalleId` INT NOT NULL AUTO_INCREMENT,
+            `EncuestaId` INT NULL,
+            `Pregunta` VARCHAR(150) NULL,
+            `Tipo` VARCHAR(45) NULL,
+            PRIMARY KEY (`DetalleId`));";
+        $wpdb->query($sql2);   
 
-    $sql3 = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuestas_respuesta (
-        `RespuestaId` INT NOT NULL AUTO_INCREMENT,
-        `DetalleId` INT NULL,
-        `Codigo` VARCHAR(45) NULL,
-        `Respuesta` VARCHAR(45) NULL,
-        PRIMARY KEY (`RespuestaId`));
-      ";
-    $wpdb->query($sql3);  
+        $sql3 = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuestas_respuesta (
+            `RespuestaId` INT NOT NULL AUTO_INCREMENT,
+            `DetalleId` INT NULL,
+            `Codigo` VARCHAR(45) NULL,
+            `Respuesta` VARCHAR(45) NULL,
+            PRIMARY KEY (`RespuestaId`));
+          ";
+        $wpdb->query($sql3);  
 
 }
 
@@ -70,3 +70,33 @@ function CrearMenu() {
 function MostrarContenido() { 
     echo "<h1>Contenido de la página</h1>";
 }
+
+//encolar bootstrap
+
+function EncolarBootstrapJS($hook){
+    //echo "<script>console.log('$hook')</script>";
+    if($hook != "testplugin/admin/lista_encuestas.php"){
+        return ;
+    }
+    wp_enqueue_script('bootstrapJs',plugins_url('admin/bootstrap/js/bootstrap.min.js',__FILE__),array('jquery'));
+} 
+add_action('admin_enqueue_scripts','EncolarBootstrapJS');
+
+function EncolarBootstrapCSS($hook){
+    if($hook != "testplugin/admin/lista_encuestas.php"){
+        return ;
+    }
+    wp_enqueue_style('bootstrapCSS',plugins_url('admin/bootstrap/css/bootstrap.min.css',__FILE__));
+}
+add_action('admin_enqueue_scripts','EncolarBootstrapCSS'); 
+
+//encolar js propio
+
+function EncolarJS($hook){
+    if($hook != "testplugin/admin/lista_encuestas.php"){
+        return ;
+    }
+    wp_enqueue_script('JsExterno',plugins_url('admin/js/lista_encuestas.js',__FILE__),array('jquery'));
+    
+}
+add_action('admin_enqueue_scripts','EncolarJS');
