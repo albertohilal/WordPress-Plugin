@@ -11,8 +11,34 @@ Author URI: http://tu-sitio-web.com
 
 
 // Activation and deactivation hooks
-function Activar() {
-    // Activación del plugin
+function Activar(){
+    global $wpdb;
+
+    $sql ="CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuestas(
+    `EncuestaId` INT NOT NULL AUTO_INCREMENT,
+        `Nombre` VARCHAR(45) NULL,
+        `ShortCode` VARCHAR(45) NULL,
+        PRIMARY KEY (`EncuestaId`));";
+
+     $wpdb->query($sql);   
+
+     $sql2 = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuenstas_detalle(
+        `DetalleId` INT NOT NULL AUTO_INCREMENT,
+        `EncuestaId` INT NULL,
+        `Pregunta` VARCHAR(150) NULL,
+        `Tipo` VARCHAR(45) NULL,
+        PRIMARY KEY (`DetalleId`));";
+    $wpdb->query($sql2);   
+
+    $sql3 = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}encuestas_respuesta (
+        `RespuestaId` INT NOT NULL AUTO_INCREMENT,
+        `DetalleId` INT NULL,
+        `Codigo` VARCHAR(45) NULL,
+        `Respuesta` VARCHAR(45) NULL,
+        PRIMARY KEY (`RespuestaId`));
+      ";
+    $wpdb->query($sql3);  
+
 }
 
 function Desactivar() {
